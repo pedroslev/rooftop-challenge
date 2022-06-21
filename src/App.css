@@ -1,38 +1,66 @@
-.App {
-  text-align: center;
+body{
+  background: rgb(0,0,0);
+  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(84,84,92,1) 46%, rgba(210,210,210,1) 100%);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.flexNavbar{
+  padding-left: 3em;
+  padding-right: 3em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.flexMenu{
+  padding: 3em;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.colMenu{
+  border-style: solid;
+  border-color: black;
+  border-width: 0.5px;
+  border-radius: 5px;
+  background-color: rgb(165, 163, 157);
+
+box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
+-webkit-box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
+-moz-box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
+}
+
+.mailInput{
+  padding: 1em;
+}
+
+.mailSubmit{
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding-bottom: 4em;
 }
 
-.App-link {
-  color: #61dafb;
+.buttonSubmitters{
+  display: flex;
+  justify-content: center;
+  padding-top: 4em;
+  padding-bottom: 4em;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dataViewers{
+  display: flex;
+  padding: 5em;
+}
+
+.dataValues{
+  margin-left: 1em;
+  width: 50em;
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+.emailDiv{
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1em;
+  padding-top: 1em;
+}
+
+.emailEntry{
+  border-radius: 5px;
+  background-color: transparent;
 }
