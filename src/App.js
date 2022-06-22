@@ -8,17 +8,15 @@ import logo from './media/rooftoplogo.png'
 import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 
-
 function App() {
   axios.defaults.baseURL = 'https://rooftop-career-switch.herokuapp.com/';
-  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
   /* state for email */
   const[Email, setEmail] = React.useState('');
   /* state for token */  
   const[Token, setToken] = React.useState('');
   /* state for Blocks */  
-  const[Blocks, setBlocks] = React.useState([]);
+  const[Blocks, setBlocks] = React.useState({});
   /* state for enabling getBlocks */
   const[disableBlocks, setDisableBlocks] = React.useState(true);
   /* state for enabling ordering and check buttons */
@@ -66,7 +64,6 @@ function App() {
     }
   }
 
-
   let orderBlocks = async (blocks)=> {
     let genesisBlock = blocks[0]
     let aux = blocks.splice(1,9)
@@ -74,26 +71,38 @@ function App() {
     for (let index = 0; index < 8; index++) {
       antiGenesis.push(aux[index]) 
     }
+    console.log(`Genesis:                 ${genesisBlock}`)
+    console.log(`antiGenesis:                 ${antiGenesis}`)
     let orderValidated = []
     orderValidated.push(genesisBlock)
+    console.log(`order validated at first: ${orderValidated}`)
       try {
         let validated = false
         let order = 0
         while(validated === false){
-          let lenght = antiGenesis.length
-          for (let index = 0; index < lenght; index++) 
+          for (let index = 0; index < 8; index++) 
           {
-            let data = `{"blocks": ["${orderValidated[order]}","${antiGenesis[index]}"]}`
-            console.log(data)
-            await axios.post(`/check?token=${Token}`, data)
-            .then((response) => {
-              console.log(response)
+            let data = JSON.stringify({
+              "blocks": [
+                orderValidated[order],
+                antiGenesis[index]
+              ]
             })
-            /*
-              if(response === true){
-                orderValidated.push(antiGenesis[index])
-                antiGenesis = antiGenesis.splice(index,1)
-                order++;}*/
+
+            console.log(`data enviada a checkSequence: ${data}`)
+          
+            let result = await axios({
+             method: 'post',
+             url: `/check?token=${Token}`,
+             headers: {'Content-Type': 'application/json'},
+             data: data
+            })
+          
+            if(result.data.message){
+              orderValidated.push(antiGenesis[index])
+              //antiGenesis = antiGenesis.splice(index,1)
+              order++;
+            }
           }
           if(orderValidated.length === 9){validated=true}
         }
@@ -102,7 +111,6 @@ function App() {
         console.error(`checkBlockError: ${error}`)
       }
   }
-  
 
   return (
     <div>
@@ -124,26 +132,28 @@ function App() {
 
       {/* MENU */}
       <Container fluid className='flexMenu'>
-
           <Row>
 
             {/* INPUT AND OPERATIONS */}
             <Col className='colMenu' sm={4}>
+
             {/* MAIL INPUT */}
             <div className='emailDiv'>
             <input type="email" id="emailInput" onChange={() => setEmail(document.getElementById('emailInput').value)} className='emailEntry'></input>
             </div>
-              
+
               {/* TOKEN PETITION BUTTON */}
               <div className='mailSubmit'>
                 <Button variant="primary" type='submit' onClick={() => getToken(Email)}>Get Token</Button>
               </div>
+
               <hr/>
+
               {/* BLOCKS PETITION BUTTON */}
               <div className='buttonSubmitters'>
               <Button variant="secondary" id='getBlocksButton' onClick={() => getBlocks(Token)} disabled={disableBlocks}>Get Blocks</Button>
               </div>
-            
+
               {/* BLOCK ORDER PETITION BUTTON */}
               <div className='buttonSubmitters'>
               <Button variant="warning" disabled={disable} onClick={() => orderBlocks(Blocks)}>Order</Button>
@@ -153,7 +163,6 @@ function App() {
               <div className='buttonSubmitters'>
               <Button variant="success" disabled={disable}>Check</Button>
               </div>
-
             </Col>
 
             {/* DASHBORAD */}
@@ -173,15 +182,11 @@ function App() {
                   <h4>Status:</h4>
                   <input className='dataValues' type="text" readOnly></input>
               </div>
-
             </Col>
-
           </Row>
-
       </Container>
     </div>
-      
-    
+
   );
 }
 
