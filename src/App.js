@@ -22,12 +22,12 @@ function App() {
   /* state for enabling ordering and check buttons */
   const[disable, setDisable] = React.useState(true);
 
-  /* func for getting token */
+  /* Function for getting token */
   let getToken = (mail) => {
     /* email regex validation */
     let emailRegex= /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if(mail.match(emailRegex)){
-      /* get token api request with axios */
+      /* Get token api request with axios */
       try {
         axios.get(`/token?email=${mail}`)
         .then((response) => {
@@ -45,7 +45,7 @@ function App() {
     }
   }
 
-  /* func for getting blocks with pre-obtained token*/
+  /* Function for getting blocks with pre-obtained token*/
   let getBlocks = async (token) => {
     try {
       await axios.get(`/blocks?token=${token}`)
@@ -55,8 +55,9 @@ function App() {
           document.getElementById('blocks').value = blockArray
           console.log(blockArray)
           setBlocks(blockArray)
+          /* Need for enabling Check button if getBlocks response 200 */
           setDisable(false)
-        }, 2000)     
+        }, 200)     
           
       })
     } catch (error) {
@@ -71,8 +72,11 @@ function App() {
     for (let index = 0; index < 8; index++) {
       antiGenesis.push(aux[index]) 
     }
-    console.log(`Genesis:                 ${genesisBlock}`)
-    console.log(`antiGenesis:                 ${antiGenesis}`)
+
+    /* FLAGS FOR BLOCKS */
+    console.log(`Genesis:${genesisBlock}`)
+    console.log(`antiGenesis:${antiGenesis}`)
+
     let orderValidated = []
     orderValidated.push(genesisBlock)
     console.log(`order validated at first: ${orderValidated}`)
@@ -80,7 +84,8 @@ function App() {
         let validated = false
         let order = 0
         while(validated === false){
-          for (let index = 0; index < 8; index++) 
+          console.log(antiGenesis.length)
+          for (let index = 0; index < antiGenesis.length; index++) 
           {
             let data = JSON.stringify({
               "blocks": [
@@ -89,7 +94,8 @@ function App() {
               ]
             })
 
-            console.log(`data enviada a checkSequence: ${data}`)
+            /* BLOCKS TO CHECK */
+            console.log(`Pair of block being checked: ${data}`)
           
             let result = await axios({
              method: 'post',
@@ -97,19 +103,31 @@ function App() {
              headers: {'Content-Type': 'application/json'},
              data: data
             })
-          
+            console.log(`Pair of blocks checked result: ${result.data.message}`)
             if(result.data.message){
               orderValidated.push(antiGenesis[index])
-              //antiGenesis = antiGenesis.splice(index,1)
+              let auxiliar = []
+              for (let sust = 0; sust < antiGenesis.length; sust++) {
+                if(antiGenesis[index] !== antiGenesis[sust]){
+                  auxiliar.push(antiGenesis[sust])
+                }
+              }
+              antiGenesis = auxiliar;
               order++;
             }
           }
           if(orderValidated.length === 9){validated=true}
         }
-        console.log(orderValidated)
+        console.log(`Orden validado encontrado! ${orderValidated}`)
       } catch (error) {
         console.error(`checkBlockError: ${error}`)
       }
+  }
+
+  let arraySorter = (array, value) => {
+    return array.filter((element) => {
+      return element !== value
+    })
   }
 
   return (
