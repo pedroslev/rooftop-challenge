@@ -209,10 +209,10 @@ function App() {
           </Navbar.Brand>
         </Container>
         <div className='infoImages'>
-          <a href='https://docs.google.com/document/d/19swkIiCr9MM6vhdyWY4xk3iMlXhFZxJmcqGgzYHj6Ok/edit' target="_blank"><img className='infoLogos' alt='rules' src={rules}></img></a>
-          <a href='https://github.com/pedroslev/rooftop-challenge' target="_blank"><img className='infoLogos' alt='repository' src={repository}></img></a>
-          <a href='https://www.linkedin.com/in/pedrolopezslevin/' target="_blank"><img className='infoLogos' alt='linkedin' src={linkedin}></img></a>
-          <a href='https://github.com/pedroslev' target="_blank"><img className='infoLogos' alt='github' src={github}></img></a>
+          <a rel="noopener noreferrer" href='https://docs.google.com/document/d/19swkIiCr9MM6vhdyWY4xk3iMlXhFZxJmcqGgzYHj6Ok/edit' target="_blank"><img className='infoLogos' alt='rules' src={rules}></img></a>
+          <a rel="noopener noreferrer" href='https://github.com/pedroslev/rooftop-challenge' target="_blank"><img className='infoLogos' alt='repository' src={repository}></img></a>
+          <a rel="noopener noreferrer" href='https://www.linkedin.com/in/pedrolopezslevin/' target="_blank"><img className='infoLogos' alt='linkedin' src={linkedin}></img></a>
+          <a rel="noopener noreferrer" href='https://github.com/pedroslev' target="_blank"><img className='infoLogos' alt='github' src={github}></img></a>
         </div>
       </Navbar>
 
@@ -265,7 +265,7 @@ function App() {
                 <ol>
                 {
                   Object.values(Blocks).map((hash) => {
-                      return <li>{hash}</li>
+                      return <li key={hash}>{hash}</li>
                   })
                 }
                 </ol>
@@ -276,7 +276,7 @@ function App() {
                   <ol>
                 {
                   validatedOrder.map((orderedHash) => {
-                      return <li>{orderedHash}</li>
+                      return <li key={orderedHash}>{orderedHash}</li>
                   })
                 }
                 </ol>

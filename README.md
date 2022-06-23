@@ -67,6 +67,9 @@ Or just execute, this will install and run all together
 
 ## Running Tests
 
+**Tests are located on /src/App.test.js** and consist on obtaining token, getting blocks
+and checking order by encoded option
+
 To run tests, you can run the following command
 
 ```bash
@@ -225,6 +228,18 @@ let arraySorter = (array, value) => {
 - **HTML CSS** <img src='https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-html-media-agency-flaticons-lineal-color-flat-icons.png' alt='HTML CSS' height='40'>
 - **BASH SCRIPTING** <img src='https://img.icons8.com/plasticine/344/bash.png' alt='BASH' height='40'>
 - **DOCKER** <img src='https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png' alt='DOCKER' height='40'>
+
+
+#### Dependencies : use
+ - **Bootstrap**: front-end making
+ - **Faker**: faking data on tests as email
+ - **Axios**: http request to API
+ - **Chai**: testing
+ - **Mocha**: testing
+ - **Nodemon**: testing
+ - **Supertest**: testing
+
+
 ## API Reference
 
 #### Get token
