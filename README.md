@@ -1,70 +1,217 @@
-# Getting Started with Create React App
+# Rooftop Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This challenge consist on obtaining a token via API request (GET) using an email 
+address as parameter. When obtaining this token, we are able to obtain a so called
+"blocks" data using our token as parameter. This blocks data consist on eight values
+of unkown generated pattern. But there is a twist, blocks obtained are unordered
+except for the first one on position zero. The objective is ordering this blocks
+validating by pairs or full concatenated string of block valuesusing the endpoint
+ /check of out API, starting off the first value that we already know its ordered.
 
-## Available Scripts
+ 
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Demo
 
-### `npm run build`
+- #### Heroku: https://rooftop-challenge-pls.herokuapp.com/
+- #### VSCode Online: https://github1s.com/pedroslev/rooftop-challenge
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Logic solution
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Obtaining token when clicking on submit email button
+This is a get request using axios, parameters as email are given on submit retrieved
+on an input. Token obtained is stored on a useState React variable
+```javascript
+let getToken = (mail) => {
+    /* email regex validation */
+    let emailRegex= /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    if(mail.match(emailRegex))
+    {
+      /* Get token api request with axios.js */
+      try 
+      {
+          axios.get(`/token?email=${mail}`)
+          .then((response) => {
+            document.getElementById("token").innerText = response.data.token;
+            /* Setting token on React State */
+            setToken(response.data.token);
+          })
+          /* Need for enabling getBlocks button if token response 200 */
+          setDisableBlocks(false);
+      } catch (error) 
+        {
+          console.error(`failure at getToken: ${error}`);
+        }
+    }else
+      {
+      /* Alert for invalid addresses  */
+      return(alert("Your email address is invalid"));
+      }
+  }
+```
 
-### `npm run eject`
+### Obtaining blocks when clicking on 'Get blocks' button
+This is a get request using axios, parameters as token are given on submit retrieved
+on a useState React variable. Blocks obtained are also stored on a useState React 
+variable
+```javascript
+let getBlocks = async (token) => {
+    try 
+    {
+      /* GET to API for obtaining blocks using axios.js */
+      await axios.get(`/blocks?token=${token}`)
+      .then((response) => {
+      /* Due to reciving large chunk of data, value assignment may be incomplete due to async function - needed timeout in case of internet quality issues - 2s timeout*/
+        setTimeout(() => {
+          let blockArray = response.data.data
+          setBlocks(blockArray)
+          /* Need for enabling Check button if getBlocks response 200 */
+          setDisable(false)
+        }, 200);
+      })
+    } catch (error) 
+      {
+        console.error(`failure at getBlocks: ${error}`);
+      }
+  }
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Checking blocks when clicking on 'Check' button
+This was the actual challenge. Fist started to separate the first block that was
+already sorted from the unsorted ones (genesis and antiGenesis blocks). Then created
+an auxiliar array to store the sorted blocks(orderValidated). Did a while loop and
+for loop, first one to recurse orderValidated and loop for antiGenesis. While on for
+loop pair of blocks data its created, this gets to compare first ordered one with 
+every other unordered blocks and validating it on /check endpoint. When the sequence
+is found, that value is deleted from antiGenesis with the purpose of saving computational
+process. Also, if there is only one value on antiGenesis this one is not validated
+by the API and its pushed into orderValidated by discard.
+```javascript
+let checkBlocks = async (blocks)=> {
+    /* First block called Genesis */
+    let genesisBlock = blocks[0];
+    /* other blocks that aren't Genesis :) */
+    let antiGenesis = arraySorter(blocks, blocks[0])
+    /* Array containing already order validated blocks w/ its pattern */
+    let orderValidated = [];
+    orderValidated.push(genesisBlock);
+      try {
+          /* bool needed to exit while loop */
+        let validated = false;
+        /* index for orderValidated array */
+        let order = 0;
+        while(validated === false){
+          for (let index = 0; index < antiGenesis.length; index++) 
+          {
+            /* block chain being constructed */
+            let data = JSON.stringify({
+              "blocks": [
+                orderValidated[order],
+                antiGenesis[index]
+              ]
+            });
+          
+            /* POST to API for checking pair of blocks using axios.js */
+            let result = await axios({
+             method: 'post',
+             url: `/check?token=${Token}`,
+             headers: {'Content-Type': 'application/json'},
+             data: data
+            });
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+            /* Validate if /check message: true/flase */
+            if(result.data.message)
+            {
+              /* Insert into already validated blocks the found one */
+              orderValidated.push(antiGenesis[index]);
+              /* Removing found value from antiGenesis blocks for less /check tries */
+              antiGenesis = arraySorter(antiGenesis, antiGenesis[index]);
+              /* Increment on order variable for checking following blocks on /check endpoint */
+              order++;
+            }
+          /* Saving one unnecessary loop and API POST discarding last value on antiGenesis*/
+          if(orderValidated.length === 8)
+            {
+              orderValidated.push(antiGenesis[0]);
+              validated=true;
+            }
+          }
+        }
+        setValidatedOrder(orderValidated)
+      } catch (error) {
+        console.error(`checkBlockError: ${error}`);
+      }
+  }
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Simple extra function used
+It just deletes the sequence found on antiGenesis for saving loops. Its used on checkBlocks()
+```javascript
+let arraySorter = (array, value) => {
+    return array.filter((element) => {
+      return element !== value;
+    });
+  };
+```
+## Tech Stack
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **REACTJS** <img src='https://img.icons8.com/ultraviolet/344/react--v2.png' alt='REACTJS' height='40'>
+- **JS** <img src='https://img.icons8.com/color/344/javascript--v1.png' alt='JS' height='40'>
+- **HTML CSS** <img src='https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-html-media-agency-flaticons-lineal-color-flat-icons.png' alt='HTML CSS' height='40'>
+- **BASH SCRIPTING** <img src='https://img.icons8.com/plasticine/344/bash.png' alt='BASH' height='40'>
+- **DOCKER** <img src='https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png' alt='DOCKER' height='40'>
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## API Reference
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### Get token
 
-### Code Splitting
+```http
+  GET /token?email=usuario@gmail.com
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `varchar` | **Required**. Any email that has regex of existing one |
 
-### Analyzing the Bundle Size
+Response Example: {"token": "38772cdc-4720-4de4-9251-9a637e174fa8"}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#### Get blocks
 
-### Making a Progressive Web App
+```http
+  GET /blocks
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `token`      | `varchar` | **Required**. token obtained before on /token endpoint |
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+#### Check order of blocks
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```http
+  POST /check
+```
 
-### `npm run build` fails to minify
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `token`      | `varchar` | **Required**. token obtained before on /token endpoint |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+You can send either 'blocks' or 'encoded' object for validation. Only difference
+is that blocks validates just a chain of two values of blocks and encoded validates
+the whole eight blocks concatenated
+| Data | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `blocks`      | `varchar` | {"blocks" : ["block0","block1"]}|
+| `encoded`      | `varchar` |{"encoded" : "block0block1block2..block8"}|
+
+## Authors
+
+- [@pedroslev](https://github.com/pedroslev)
+

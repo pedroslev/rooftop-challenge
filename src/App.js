@@ -60,7 +60,6 @@ function App() {
       }
   }
 
-
   /* Function for getting blocks with pre-obtained token*/
   let getBlocks = async (token) => {
     try 
@@ -71,7 +70,6 @@ function App() {
       /* Due to reciving large chunk of data, value assignment may be incomplete due to async function - needed timeout in case of internet quality issues - 2s timeout*/
         setTimeout(() => {
           let blockArray = response.data.data
-          //document.getElementById('blocks').value = blockArray
           console.log(blockArray)
           setBlocks(blockArray)
           /* Need for enabling Check button if getBlocks response 200 */
@@ -101,7 +99,6 @@ function App() {
         let validated = false;
         let order = 0;
         while(validated === false){
-          console.log(antiGenesis.length);
           for (let index = 0; index < antiGenesis.length; index++) 
           {
             let data = JSON.stringify({
@@ -142,9 +139,6 @@ function App() {
               validated=true;
             }
           }
-
-          
-          //if(orderValidated.length === 9){validated=true};
         }
         console.log(`Orden validado encontrado! ${orderValidated}`);
         setValidatedOrder(orderValidated)
@@ -220,7 +214,6 @@ function App() {
               <div className='dataViewers'>
                 <h4>Token:</h4>
                 <p id='token' name='token'></p>
-                {/* <input className='dataValues' type="text" id='token' name='token' readOnly></input> */}
               </div>
 
               <div className='dataViewers'>
@@ -228,9 +221,7 @@ function App() {
                 <ol>
                 {
                   Object.values(Blocks).map((hash) => {
-                    
                       return <li>{hash}</li>
-                    
                   })
                 }
                 </ol>
@@ -241,9 +232,7 @@ function App() {
                   <ol>
                 {
                   validatedOrder.map((orderedHash) => {
-                    
                       return <li>{orderedHash}</li>
-                    
                   })
                 }
                 </ol>
@@ -252,7 +241,6 @@ function App() {
           </Row>
       </Container>
     </div>
-
   );
 }
 
