@@ -5,7 +5,7 @@ address as parameter. When obtaining this token, we are able to obtain a so call
 "blocks" data using our token as parameter. This blocks data consist on eight values
 of unkown generated pattern. But there is a twist, blocks obtained are unordered
 except for the first one on position zero. The objective is ordering this blocks
-validating by pairs or full concatenated string of block valuesusing the endpoint
+validating by pairs or full concatenated string of block values using the endpoint
  /check of out API, starting off the first value that we already know its ordered.
 
  
