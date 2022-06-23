@@ -25,12 +25,12 @@ cd rooftop-challenge
 sudo ./build.sh
 sudo ./deploy.sh
 ```
-This will run a detached container where deployed, binding port 8080
-If you want to stop the container just run 'sudo ./stop.sh'
+This will run a detached container where deployed, binding port 8080.
+If wanted to stop the container just run 'sudo ./stop.sh'
 ## Logic solution
 
 ### Obtaining token when clicking on submit email button
-This is a get request using axios, parameters as email are given on submit retrieved
+This is a GET request using axios, parameters as email are given on submit retrieved
 on an input. Token obtained is stored on a useState React variable
 ```javascript
 let getToken = (mail) => {
@@ -63,7 +63,7 @@ let getToken = (mail) => {
 ```
 
 ### Obtaining blocks when clicking on 'Get blocks' button
-This is a get request using axios, parameters as token are given on submit retrieved
+This is a GET request using axios, parameters as token are given on submit retrieved
 on a useState React variable. Blocks obtained are also stored on a useState React 
 variable
 ```javascript
@@ -89,7 +89,7 @@ let getBlocks = async (token) => {
 ```
 
 ### Checking blocks when clicking on 'Check' button
-This was the actual challenge. Fist started to separate the first block that was
+This was the actual challenge. First started to separate the first block that was
 already sorted from the unsorted ones (genesis and antiGenesis blocks). Then created
 an auxiliar array to store the sorted blocks(orderValidated). Did a while loop and
 for loop, first one to recurse orderValidated and loop for antiGenesis. While on for
