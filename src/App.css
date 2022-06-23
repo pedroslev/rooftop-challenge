@@ -8,12 +8,23 @@ body{
   padding-right: 3em;
 }
 
+.infoImages{
+  display: flex;
+  flex-direction: row;
+}
+
+.infoLogos{
+height: 2em;
+padding-left: 1em;
+padding-right: 1em;
+}
+
 .flexMenu{
-  padding: 3em;
+  padding: 2em;
 }
 
 .colMenu{
-  border-style: solid;
+  border-style: outset;
   border-color: black;
   border-width: 0.5px;
   border-radius: 5px;
@@ -22,6 +33,10 @@ body{
 box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
 -webkit-box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
 -moz-box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
+}
+
+.colMenu:hover{
+  border-color: white;
 }
 
 .mailInput{
@@ -43,7 +58,10 @@ box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
 
 .dataViewers{
   display: flex;
-  padding: 5em;
+  padding-top: 2em;
+  padding-bottom: 2em;
+  padding-left: 0.5em;
+  flex-direction: column;
 }
 
 .dataValues{
@@ -56,6 +74,7 @@ box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
 .emailDiv{
   display: flex;
   justify-content: center;
+  flex-direction: column;
   padding-bottom: 1em;
   padding-top: 1em;
 }
@@ -64,3 +83,29 @@ box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
   border-radius: 5px;
   background-color: transparent;
 }
+
+li{
+  font-size: 0.7em;
+}
+
+ol{
+  padding-left: 0.5px;
+}
+
+
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) { 
+    li{
+      font-size: 0.33em;
+    }
+    
+    ol{
+      padding-left: 0.1px;
+    }
+
+}
+    
+
