@@ -10,16 +10,23 @@ validating by pairs or full concatenated string of block valuesusing the endpoin
 
  
 
-
-
-
-
-
 ## Demo
 
 - #### Heroku: https://rooftop-challenge-pls.herokuapp.com/
 - #### VSCode Online: https://github1s.com/pedroslev/rooftop-challenge
+- #### Deploy locally using docker(only WSL or Linux server/desktop):
 
+#### Required:
+ - docker: https://docs.docker.com/engine/install/
+ - docker-compose: https://docs.docker.com/compose/install/
+```bash
+git clone https://github.com/pedroslev/rooftop-challenge.git
+cd rooftop-challenge
+sudo ./build.sh
+sudo ./deploy.sh
+```
+This will run a detached container where deployed, binding port 8080
+If you want to stop the container just run 'sudo ./stop.sh'
 ## Logic solution
 
 ### Obtaining token when clicking on submit email button
