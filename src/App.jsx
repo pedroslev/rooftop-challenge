@@ -185,7 +185,7 @@ function App() {
     break;
   }
 
-
+  /* Just deletes the found value from antiGenesis */
   let arraySorter = (array, value) => {
     return array.filter((element) => {
       return element !== value;
@@ -208,6 +208,7 @@ function App() {
           Rooftop Challenge
           </Navbar.Brand>
         </Container>
+        {/* Extra data: challenge rules | github repo | linkedin profile | github profile */}
         <div className='infoImages'>
           <a rel="noopener noreferrer" href='https://docs.google.com/document/d/19swkIiCr9MM6vhdyWY4xk3iMlXhFZxJmcqGgzYHj6Ok/edit' target="_blank"><img className='infoLogos' alt='rules' src={rules}></img></a>
           <a rel="noopener noreferrer" href='https://github.com/pedroslev/rooftop-challenge' target="_blank"><img className='infoLogos' alt='repository' src={repository}></img></a>
@@ -254,7 +255,8 @@ function App() {
 
             {/* DASHBORAD */}
             <Col className='colMenu' sm={8}>
-
+              
+              {/* Token view */}
               <div className='dataViewers'>
                 <h4>Token:</h4>
                 <p id='token' name='token'></p>
@@ -263,6 +265,7 @@ function App() {
               <div className='dataViewers'>
                 <h4>Blocks:</h4>
                 <ol>
+                  {/* Mapping of block values */}
                 {
                   Object.values(Blocks).map((hash) => {
                       return <li key={hash}>{hash}</li>
@@ -274,6 +277,7 @@ function App() {
               <div className='dataViewers'>
                   <h4>Correct order:</h4>
                   <ol>
+                    {/* Mapping of ordered block values */}
                 {
                   validatedOrder.map((orderedHash) => {
                       return <li key={orderedHash}>{orderedHash}</li>
