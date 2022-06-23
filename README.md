@@ -296,3 +296,5 @@ or shown on front-end as well as token or correct order, but as this is a challe
 I created a front-end demo page for you to test any email/token/blocks desired.
 
 Data could be protected by many means, but decided to demo it.
+
+Also, you can view data being processed on devtools console, token being obtained, blocks obtained, pair of blocks being checked and result of  order validation.

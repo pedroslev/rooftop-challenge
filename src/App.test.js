@@ -1,3 +1,4 @@
+/* Dependencies */
 const request = require('supertest')('https://rooftop-career-switch.herokuapp.com')
 const expect = require('chai').expect
 const faker = require('faker')
@@ -12,11 +13,13 @@ jest.setTimeout(5000000)
 let token;
 let  blocks;
 
+/* faker email generator function */
 const emailGenerator = () => {
    let email = faker.internet.email()
    return email;
 }
 
+/* Gets token using faker email */
 describe('API getting token with random generated email using faker test', () => {
   describe('GET', () => {
     it('expected 200 code and token', async () => {
@@ -32,7 +35,7 @@ describe('API getting token with random generated email using faker test', () =>
   })
 })
 
-
+/* This test just gets the blocks by previous obtained token */
 describe('API getting blocks with previous generated tokens using faker emails test', () => {
   describe('GET', () => {
     it('expected 200 code and blocks in return', async () => {
@@ -48,7 +51,8 @@ describe('API getting blocks with previous generated tokens using faker emails t
 })
 
 
-
+/* Used same function as in App.js to test the checking of block order
+but this time added a last /check validation using block concatenation */
 describe('Blocks generated ordered and checked on encoded option', () => {
   describe('POST', () => {
     it('expected 200 code and true message due to correct order', async () => {
