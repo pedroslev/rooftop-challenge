@@ -52,7 +52,13 @@ box-shadow: 20px 20px 100px 27px rgba(0,0,0,0.6);
 .buttonSubmitters{
   display: flex;
   justify-content: center;
-  padding-top: 4em;
+  padding-top: 6em;
+  padding-bottom: 4em;
+}
+
+.status{
+  display: flex;
+  justify-content: center;
   padding-bottom: 4em;
 }
 

@@ -1,3 +1,4 @@
+
 # Rooftop Challenge
 
 This challenge consist on obtaining a token via API request (GET) using an email 
@@ -9,6 +10,11 @@ validating by pairs or full concatenated string of block values using the endpoi
  /check of out API, starting off the first value that we already know its ordered.
 
  
+
+
+
+
+
 
 ## Demo
 
@@ -27,6 +33,53 @@ sudo ./deploy.sh
 ```
 This will run a detached container where deployed, binding port 8080.
 If wanted to stop the container just run 'sudo ./stop.sh'
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/pedroslev/rooftop-challenge.git
+```
+
+Go to the project directory
+
+```bash
+  cd rooftop-challenge
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+```bash
+  npm start
+```
+
+Or just execute, this will install and run all together
+```bash
+  sudo ./start
+```
+
+
+
+## Running Tests
+
+To run tests, you can run the following command
+
+```bash
+  npm run test
+```
+
+Or just execute the 'test.sh' script with
+
+```bash
+  sudo ./test.sh
+```
+
+
 ## Logic solution
 
 ### Obtaining token when clicking on submit email button
@@ -165,15 +218,13 @@ let arraySorter = (array, value) => {
     });
   };
 ```
-## Tech Stack
+## Tech used
 
 - **REACTJS** <img src='https://img.icons8.com/ultraviolet/344/react--v2.png' alt='REACTJS' height='40'>
 - **JS** <img src='https://img.icons8.com/color/344/javascript--v1.png' alt='JS' height='40'>
 - **HTML CSS** <img src='https://img.icons8.com/external-flaticons-lineal-color-flat-icons/344/external-html-media-agency-flaticons-lineal-color-flat-icons.png' alt='HTML CSS' height='40'>
 - **BASH SCRIPTING** <img src='https://img.icons8.com/plasticine/344/bash.png' alt='BASH' height='40'>
 - **DOCKER** <img src='https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png' alt='DOCKER' height='40'>
-
-
 ## API Reference
 
 #### Get token
@@ -222,3 +273,11 @@ the whole eight blocks concatenated
 
 - [@pedroslev](https://github.com/pedroslev)
 
+
+## Appendix
+
+For avoiding misunderstandings: I understand data as token shouldn't be revealed
+or shown on front-end as well as token or correct order, but as this is a challenge
+I created a front-end demo page for you to test any email/token/blocks desired.
+
+Data could be protected by many means, but decided to demo it.

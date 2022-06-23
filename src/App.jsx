@@ -1,9 +1,11 @@
 import './App.css';
 import React from 'react';
-import  Container  from 'react-bootstrap/Container';
-import  Row  from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Navbar from 'react-bootstrap/Navbar'
+import Spinner from 'react-bootstrap/Spinner';
+import Badge from 'react-bootstrap/Badge';
 import logo from './media/rooftoplogo.png'
 import rules from './media/rules.png'
 import repository from './media/repository.png'
@@ -28,6 +30,8 @@ function App() {
   const[disableBlocks, setDisableBlocks] = React.useState(true);
   /* state for enabling ordering and check buttons */
   const[disable, setDisable] = React.useState(true);
+  /* state for enabling ordering and check buttons */
+  const[status, setStatus] = React.useState('');
 
   /* Function for getting token */
   let getToken = (mail) => {
@@ -40,7 +44,14 @@ function App() {
       /* Get token api request with axios.js */
       try 
       {
-          axios.get(`/token?email=${mail}`)
+          axios({
+            method: 'GET',
+            url: `/token?email=${mail}`,
+            headers: {
+              'Content-Type': 'application/json',
+              'Content-Encoding': 'gzip'
+             }
+          })
           .then((response) => {
             console.log(`token has been obtained: ${response.data.token}`);
             document.getElementById("token").innerText = response.data.token;
@@ -65,7 +76,14 @@ function App() {
     try 
     {
       /* GET to API for obtaining blocks using axios.js */
-      await axios.get(`/blocks?token=${token}`)
+      await axios({
+        method: 'GET',
+        url: `/blocks?token=${token}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Encoding': 'gzip'
+         }
+      })
       .then((response) => {
       /* Due to reciving large chunk of data, value assignment may be incomplete due to async function - needed timeout in case of internet quality issues - 2s timeout*/
         setTimeout(() => {
@@ -84,7 +102,7 @@ function App() {
 
   /* Function for /check? endpoint */
   let checkBlocks = async (token, blocks)=> {
-
+    setStatus('loading')
     let genesisBlock = blocks[0];
     let antiGenesis = arraySorter(blocks, blocks[0])
 
@@ -113,9 +131,11 @@ function App() {
           
             /* POST to API for checking pair of blocks using axios.js */
             let result = await axios({
-             method: 'post',
+             method: 'POST',
              url: `/check?token=${token}`,
-             headers: {'Content-Type': 'application/json'},
+             headers: {
+               'Content-Type': 'application/json',
+              },
              data: data
             });
 
@@ -141,12 +161,30 @@ function App() {
           }
         }
         console.log(`Orden validado encontrado! ${orderValidated}`);
+        setStatus('done')
         setValidatedOrder(orderValidated)
-        return orderValidated;
       } catch (error) {
         console.error(`checkBlockError: ${error}`);
       }
   }
+
+  /* Status of checking process for user (spinner or badge)*/
+  let stat
+  switch(status){
+
+  case 'loading':
+   stat =   <Spinner animation="border" variant="dark" />
+  break;
+
+  case 'done':
+   stat = <Badge bg="success">Success</Badge>
+  break;
+  
+  default:
+    stat =''
+    break;
+  }
+
 
   let arraySorter = (array, value) => {
     return array.filter((element) => {
@@ -206,6 +244,11 @@ function App() {
               {/* BLOCK CHECK PETITION BUTTON */}
               <div className='buttonSubmitters'>
               <Button variant="success" disabled={disable} onClick={() => checkBlocks(Token, Blocks)}>Check</Button>
+              </div>
+
+              {/* Spinner or badge for status */}
+              <div className="status">
+              { stat }
               </div>
             </Col>
 
