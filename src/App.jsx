@@ -83,7 +83,7 @@ function App() {
   }
 
   /* Function for /check? endpoint */
-  let checkBlocks = async (blocks)=> {
+  let checkBlocks = async (token, blocks)=> {
 
     let genesisBlock = blocks[0];
     let antiGenesis = arraySorter(blocks, blocks[0])
@@ -114,7 +114,7 @@ function App() {
             /* POST to API for checking pair of blocks using axios.js */
             let result = await axios({
              method: 'post',
-             url: `/check?token=${Token}`,
+             url: `/check?token=${token}`,
              headers: {'Content-Type': 'application/json'},
              data: data
             });
@@ -142,6 +142,7 @@ function App() {
         }
         console.log(`Orden validado encontrado! ${orderValidated}`);
         setValidatedOrder(orderValidated)
+        return orderValidated;
       } catch (error) {
         console.error(`checkBlockError: ${error}`);
       }
@@ -204,7 +205,7 @@ function App() {
 
               {/* BLOCK CHECK PETITION BUTTON */}
               <div className='buttonSubmitters'>
-              <Button variant="success" disabled={disable} onClick={() => checkBlocks(Blocks)}>Check</Button>
+              <Button variant="success" disabled={disable} onClick={() => checkBlocks(Token, Blocks)}>Check</Button>
               </div>
             </Col>
 
