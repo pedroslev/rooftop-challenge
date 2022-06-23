@@ -1,0 +1,10 @@
+version: "3.5"
+
+services:
+  rooftop-challenge:
+    image: "rooftop-challenge:v1.0.0"
+    restart: always
+    ports:
+      - 8080:8080
+    container_name: rooftop-challenge
+
